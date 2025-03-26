@@ -1,0 +1,12 @@
+#How to Run
+
+Öffne CMD
+
+# Ins Projektverzeichnis wechseln (falls noch nicht geschehen)
+cd dein-projektverzeichnis
+
+# Abhängigkeiten installieren (falls noch nicht geschehen)
+npm install
+
+# Entwicklungsserver starten
+npm run dev
