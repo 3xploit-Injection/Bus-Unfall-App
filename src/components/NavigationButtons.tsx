@@ -3,6 +3,8 @@ import { useTranslation } from "@/lib/translations";
 import { Button } from "./ui/button";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { sendReport } from "@/lib/email";
+import { saveReportLocally } from "@/lib/storage";
 
 export function NavigationButtons() {
   const { 
@@ -59,32 +61,49 @@ export function NavigationButtons() {
     try {
       setIsSending(true);
       
-      // Send report to backend
-      const response = await fetch('/api/send-report', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          formData,
-          photos,
-        }),
-      });
+      // Versuche, den Bericht per E-Mail zu senden
+      const emailResult = await sendReport(formData, photos);
       
-      const data = await response.json();
-      
-      if (data.success) {
-        toast.success(`Bericht an gangerapollo16@gmail.com gesendet`);
+      // Wenn der E-Mail-Versand fehlschlägt, speichere den Bericht lokal
+      if (!emailResult.success) {
+        console.log("Email sending failed, saving report locally");
+        const localResult = await saveReportLocally(formData, photos);
+        
+        if (localResult.success) {
+          toast.success("Bericht lokal gespeichert. Sie können ihn später erneut senden.");
+          setIsSuccess(true);
+          resetPhotos();
+          resetForm();
+          setCurrentStep(0);
+        } else {
+          toast.error("Fehler beim Speichern des Berichts");
+        }
+      } else {
+        // E-Mail-Versand erfolgreich
+        toast.success(emailResult.message);
         setIsSuccess(true);
         resetPhotos();
         resetForm();
         setCurrentStep(0);
-      } else {
-        toast.error(t("emailFail"));
       }
     } catch (error) {
-      console.error('Error sending report:', error);
-      toast.error(t("emailFail"));
+      console.error('Error in report submission process:', error);
+      
+      // Bei einem unerwarteten Fehler versuchen wir, lokal zu speichern
+      try {
+        const localResult = await saveReportLocally(formData, photos);
+        if (localResult.success) {
+          toast.success("Bericht lokal gespeichert. Sie können ihn später erneut senden.");
+          setIsSuccess(true);
+          resetPhotos();
+          resetForm();
+          setCurrentStep(0);
+        } else {
+          toast.error("Fehler beim Speichern des Berichts");
+        }
+      } catch (storageError) {
+        toast.error("Kritischer Fehler beim Speichern des Berichts");
+      }
     } finally {
       setIsSending(false);
     }
