@@ -9,8 +9,22 @@ Egal ob kleiner Kratzer oder größerer Schaden: Mit IVB Unfallaufnehmer sind Si
 ➡️ ##Jetzt downloaden und stressfrei den Unfall melden!
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#How to Run
+
+Öffne CMD
+
+# Ins Projektverzeichnis wechseln (falls noch nicht geschehen)
+cd dein-projektverzeichnis
+
+# Abhängigkeiten installieren (falls noch nicht geschehen)
+npm install
+
+# Entwicklungsserver starten
+npm run dev
 
 zum Laufen zu bringen.
+
+------------------------------------------------------------------
 
 Aktuell sind zwei offizielle Plugins verfügbar:
 
