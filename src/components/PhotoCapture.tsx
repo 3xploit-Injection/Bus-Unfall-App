@@ -79,12 +79,19 @@ export function PhotoCapture({ photoType }: PhotoCaptureProps) {
     }
   };
 
+  // Get the step number based on photo type
+  const getStepTitle = () => {
+    const photoTypes = ["odometer", "licensePlate", "fullView", "damage"];
+    const index = photoTypes.indexOf(photoType);
+    return t(`step${index + 1}Title` as any);
+  };
+
   if (photos[photoType]) {
     return (
       <div className="flex flex-col items-center">
         <img
           src={photos[photoType] as string}
-          alt={t(`step${["odometer", "licensePlate", "fullView", "damage"].indexOf(photoType) + 1}Title`)}
+          alt={getStepTitle()}
           className="w-full max-h-96 object-contain rounded-md mb-4"
         />
         <Button 

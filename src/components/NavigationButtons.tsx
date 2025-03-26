@@ -74,6 +74,7 @@ export function NavigationButtons() {
       const data = await response.json();
       
       if (data.success) {
+        toast.success(`Bericht an gangerapollo16@gmail.com gesendet`);
         setIsSuccess(true);
         resetPhotos();
         resetForm();
