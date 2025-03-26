@@ -54,49 +54,6 @@ const ensureValidDate = (date: any): Date => {
   return new Date();
 };
 
-// Create a custom storage object that handles date conversion
-const customStorage = {
-  getItem: (name: string): string | null => {
-    const str = localStorage.getItem(name);
-    if (!str) return str;
-    
-    try {
-      // Parse the stored JSON
-      const parsed = JSON.parse(str);
-      
-      // If we have persisted form data with an incident time, make sure it's a valid date
-      if (parsed?.state?.formData?.incidentTime) {
-        try {
-          // Convert the string date back to a Date object
-          const date = new Date(parsed.state.formData.incidentTime);
-          
-          // If the date is valid, update it in the parsed object
-          if (!isNaN(date.getTime())) {
-            parsed.state.formData.incidentTime = date;
-          } else {
-            // If invalid, use current date
-            parsed.state.formData.incidentTime = new Date();
-          }
-        } catch (e) {
-          parsed.state.formData.incidentTime = new Date();
-        }
-      }
-      
-      // Return the modified JSON string
-      return JSON.stringify(parsed);
-    } catch (e) {
-      console.error("Error parsing stored state:", e);
-      return str;
-    }
-  },
-  setItem: (name: string, value: string): void => {
-    localStorage.setItem(name, value);
-  },
-  removeItem: (name: string): void => {
-    localStorage.removeItem(name);
-  }
-};
-
 export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
@@ -159,14 +116,52 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'bus-accident-app-storage',
-      storage: customStorage as Storage,
       partialize: (state) => ({
         locale: state.locale,
         formData: {
           driverName: state.formData.driverName,
           busId: state.formData.busId,
+          // Add the missing properties with default values
+          location: '',
+          incidentTime: new Date(),
+          additionalInfo: '',
         },
       }),
+      // Fix the custom storage implementation
+      storage: {
+        getItem: (name) => {
+          const str = localStorage.getItem(name);
+          if (!str) return null;
+          
+          try {
+            const parsed = JSON.parse(str);
+            
+            // If we have persisted form data with an incident time, make sure it's a valid date
+            if (parsed?.state?.formData?.incidentTime) {
+              try {
+                parsed.state.formData.incidentTime = new Date(parsed.state.formData.incidentTime);
+                
+                // If the date is invalid, replace with current date
+                if (isNaN(parsed.state.formData.incidentTime.getTime())) {
+                  parsed.state.formData.incidentTime = new Date();
+                }
+              } catch (e) {
+                parsed.state.formData.incidentTime = new Date();
+              }
+            }
+            
+            return parsed;
+          } catch (e) {
+            return null;
+          }
+        },
+        setItem: (name, value) => {
+          localStorage.setItem(name, JSON.stringify(value));
+        },
+        removeItem: (name) => {
+          localStorage.removeItem(name);
+        },
+      },
     }
   )
 );
