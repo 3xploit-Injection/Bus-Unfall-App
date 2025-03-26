@@ -1,0 +1,95 @@
+export const translations = {
+  de: {
+    appTitle: 'Bus Unfalldaten',
+    step1Title: 'Kilometerstand',
+    step1Desc: 'Fotografieren Sie den aktuellen Kilometerstand',
+    step2Title: 'Kennzeichen',
+    step2Desc: 'Fotografieren Sie das Nummernschild des Busses',
+    step3Title: 'Gesamtansicht',
+    step3Desc: 'Fotografieren Sie den gesamten Bus',
+    step4Title: 'Schaden',
+    step4Desc: 'Fotografieren Sie den Schaden am Bus',
+    step5Title: 'Zusätzliche Informationen',
+    step5Desc: 'Optionale zusätzliche Informationen eingeben',
+    takePhoto: 'Foto aufnehmen',
+    retakePhoto: 'Foto neu aufnehmen',
+    next: 'Weiter',
+    back: 'Zurück',
+    send: 'Absenden',
+    additionalInfo: 'Zusätzliche Informationen (optional)',
+    emailSuccess: 'Bericht erfolgreich gesendet',
+    emailFail: 'Fehler beim Senden des Berichts',
+    missingPhotos: 'Bitte nehmen Sie alle erforderlichen Fotos auf',
+    language: 'Sprache',
+    waitForCamera: 'Kamera wird initialisiert...',
+    permissionDenied: 'Kamerazugriff verweigert',
+    sending: 'Bericht wird gesendet...',
+    incidentTime: 'Unfallzeit',
+    confirm: 'Bestätigen',
+    busId: 'Bus-ID',
+    location: 'Unfallort',
+    driverName: 'Name des Fahrers',
+    photoSummary: 'Fotos',
+    startOver: 'Neuen Bericht erstellen',
+    successMessage: 'Ihr Bericht wurde erfolgreich gesendet.',
+    useCamera: 'Kamera verwenden',
+    uploadPhoto: 'Foto hochladen',
+    or: 'oder',
+    requiredField: 'Pflichtfeld',
+    dateFormat: 'TT.MM.JJJJ',
+    timeFormat: 'HH:MM',
+    setCurrentTime: 'Aktuelle Zeit übernehmen'
+  },
+  en: {
+    appTitle: 'Bus Accident Data',
+    step1Title: 'Odometer',
+    step1Desc: 'Take a photo of the current odometer reading',
+    step2Title: 'License Plate',
+    step2Desc: 'Take a photo of the bus license plate',
+    step3Title: 'Full View',
+    step3Desc: 'Take a photo of the entire bus',
+    step4Title: 'Damage',
+    step4Desc: 'Take a photo of the damage to the bus',
+    step5Title: 'Additional Information',
+    step5Desc: 'Enter optional additional information',
+    takePhoto: 'Take Photo',
+    retakePhoto: 'Retake Photo',
+    next: 'Next',
+    back: 'Back',
+    send: 'Send',
+    additionalInfo: 'Additional information (optional)',
+    emailSuccess: 'Report sent successfully',
+    emailFail: 'Error sending report',
+    missingPhotos: 'Please take all required photos',
+    language: 'Language',
+    waitForCamera: 'Initializing camera...',
+    permissionDenied: 'Camera access denied',
+    sending: 'Sending report...',
+    incidentTime: 'Incident time',
+    confirm: 'Confirm',
+    busId: 'Bus ID',
+    location: 'Accident location',
+    driverName: 'Driver name',
+    photoSummary: 'Photos',
+    startOver: 'Create new report',
+    successMessage: 'Your report has been successfully sent.',
+    useCamera: 'Use camera',
+    uploadPhoto: 'Upload photo',
+    or: 'or',
+    requiredField: 'Required field',
+    dateFormat: 'DD.MM.YYYY',
+    timeFormat: 'HH:MM',
+    setCurrentTime: 'Use current time'
+  }
+};
+
+export type TranslationKey = keyof typeof translations.en;
+
+export function useTranslation(locale: string) {
+  const t = (key: TranslationKey): string => {
+    const lang = locale === 'de' || locale === 'en' ? locale : 'en';
+    return translations[lang][key] || key;
+  };
+
+  return { t };
+}
