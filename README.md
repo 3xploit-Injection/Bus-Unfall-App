@@ -10,16 +10,18 @@ Egal ob kleiner Kratzer oder größerer Schaden: Mit IVB Unfallaufnehmer sind Si
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+zum Laufen zu bringen.
 
-Currently, two official plugins are available:
+Aktuell sind zwei offizielle Plugins verfügbar:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+@vitejs/plugin-react – nutzt Babel für Fast Refresh
 
-## Expanding the ESLint configuration
+@vitejs/plugin-react-swc – nutzt SWC für Fast Refresh
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+
+## ESLint-Konfiguration erweitern
+
+In deinem Vite + React-Projekt kannst du die ESLint-Regeln anpassen, um Code-Qualität, Konsistenz und Best Practices durchzusetzen.
 
 - Configure the top-level `parserOptions` property like this:
 
