@@ -4,32 +4,66 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 
 export function FormInputs() {
   const { formData, updateFormData, locale } = useAppStore();
   const { t } = useTranslation(locale);
 
+  // Ensure we have a valid date
+  const incidentTime = isValid(formData.incidentTime) 
+    ? formData.incidentTime 
+    : new Date();
+
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const [day, month, year] = e.target.value.split('.');
-    if (day && month && year) {
-      const newDate = new Date(formData.incidentTime);
-      newDate.setFullYear(parseInt(year), parseInt(month) - 1, parseInt(day));
-      updateFormData('incidentTime', newDate);
+    try {
+      const [day, month, year] = e.target.value.split('.');
+      if (day && month && year) {
+        const newDate = new Date(incidentTime);
+        newDate.setFullYear(parseInt(year), parseInt(month) - 1, parseInt(day));
+        
+        // Only update if the resulting date is valid
+        if (isValid(newDate)) {
+          updateFormData('incidentTime', newDate);
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing date:", error);
+      // Don't update the date if there's an error
     }
   };
 
   const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const [hours, minutes] = e.target.value.split(':');
-    if (hours && minutes) {
-      const newDate = new Date(formData.incidentTime);
-      newDate.setHours(parseInt(hours), parseInt(minutes));
-      updateFormData('incidentTime', newDate);
+    try {
+      const [hours, minutes] = e.target.value.split(':');
+      if (hours && minutes) {
+        const newDate = new Date(incidentTime);
+        newDate.setHours(parseInt(hours), parseInt(minutes));
+        
+        // Only update if the resulting date is valid
+        if (isValid(newDate)) {
+          updateFormData('incidentTime', newDate);
+        }
+      }
+    } catch (error) {
+      console.error("Error parsing time:", error);
+      // Don't update the time if there's an error
     }
   };
 
   const setCurrentTime = () => {
     updateFormData('incidentTime', new Date());
+  };
+
+  // Safe date formatting function
+  const safeFormat = (date: Date, formatString: string): string => {
+    try {
+      if (!isValid(date)) return "";
+      return format(date, formatString);
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return "";
+    }
   };
 
   return (
@@ -79,7 +113,7 @@ export function FormInputs() {
           <div className="flex-1">
             <Input
               id="incidentDate"
-              value={format(formData.incidentTime, "dd.MM.yyyy")}
+              value={safeFormat(incidentTime, "dd.MM.yyyy")}
               onChange={handleDateChange}
               placeholder={t("dateFormat")}
             />
@@ -87,7 +121,7 @@ export function FormInputs() {
           <div className="flex-1">
             <Input
               id="incidentTime"
-              value={format(formData.incidentTime, "HH:mm")}
+              value={safeFormat(incidentTime, "HH:mm")}
               onChange={handleTimeChange}
               placeholder={t("timeFormat")}
             />
