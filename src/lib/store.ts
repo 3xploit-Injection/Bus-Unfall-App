@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+{ create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export type PhotoType = {
