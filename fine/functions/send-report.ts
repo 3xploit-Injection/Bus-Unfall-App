@@ -45,7 +45,7 @@ ${formData.additionalInfo || "Keine"}
     
     return new Response(JSON.stringify({ 
       success: true,
-      message: "Report sent successfully to gangerapollo16@gmail.com" 
+      message: "Report sent successfully to Niggergiggler@gmail.com" 
     }), {
       headers: { "Content-Type": "application/json" }
     });
